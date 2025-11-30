@@ -97,6 +97,41 @@ const seedData = async () => {
         password: 'employee123',
         employeeId: 'EMP010',
         department: 'Marketing'
+      },
+      {
+        name: 'Ivy Chen',
+        email: 'ivy@example.com',
+        password: 'employee123',
+        employeeId: 'EMP011',
+        department: 'Engineering'
+      },
+      {
+        name: 'Jack Rodriguez',
+        email: 'jack@example.com',
+        password: 'employee123',
+        employeeId: 'EMP012',
+        department: 'Sales'
+      },
+      {
+        name: 'Kara Singh',
+        email: 'kara@example.com',
+        password: 'employee123',
+        employeeId: 'EMP013',
+        department: 'HR'
+      },
+      {
+        name: 'Liam Patel',
+        email: 'liam@example.com',
+        password: 'employee123',
+        employeeId: 'EMP014',
+        department: 'Finance'
+      },
+      {
+        name: 'Maya Gupta',
+        email: 'maya@example.com',
+        password: 'employee123',
+        employeeId: 'EMP015',
+        department: 'Marketing'
       }
     ];
 
@@ -171,7 +206,7 @@ const seedData = async () => {
     console.log('\nLogin credentials:');
     console.log('Manager - Email: manager@example.com, Password: manager123');
     console.log('Employee - Email: john@example.com, Password: employee123');
-    console.log('(Other employees: jane@example.com, bob@example.com, alice@example.com, charlie@example.com, david@example.com, emma@example.com, frank@example.com, grace@example.com, henry@example.com)');
+    console.log('(Other employees: jane@example.com, bob@example.com, alice@example.com, charlie@example.com, david@example.com, emma@example.com, frank@example.com, grace@example.com, henry@example.com, ivy@example.com, jack@example.com, kara@example.com, liam@example.com, maya@example.com)');
 
     process.exit(0);
   } catch (error) {

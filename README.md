@@ -30,6 +30,47 @@ A comprehensive attendance tracking system with role-based access for employees 
 - ✅ Dashboard with team statistics and charts
 - ✅ Team calendar view
 
+## Screenshots
+
+### Login Page
+![Login Page](screenshots/login.png)
+
+### Employee Dashboard
+![Employee Dashboard](screenshots/employee-dashboard.png)
+
+### Mark Attendance
+![Mark Attendance](screenshots/mark-attendance.png)
+
+### Attendance History
+![Attendance History](screenshots/attendance-history.png)
+
+### Employee Profile
+![Employee Profile](screenshots/employee-profile.png)
+
+### Manager Dashboard
+![Manager Dashboard](screenshots/manager-dashboard.png)
+
+### All Employees Attendance
+![All Employees Attendance](screenshots/all-employees-attendance.png)
+
+### Team Calendar View
+![Team Calendar View](screenshots/team-calendar-view.png)
+
+### Reports
+![Reports](screenshots/reports.png)
+
+### Calendar View Details
+![Calendar View Details](screenshots/calendar-details.png)
+
+### Attendance Details Modal
+![Attendance Details Modal](screenshots/attendance-details-modal.png)
+
+### Check-in Confirmation
+![Check-in Confirmation](screenshots/checkin-confirmation.png)
+
+### Check-out Confirmation
+![Check-out Confirmation](screenshots/checkout-confirmation.png)
+
 ## Project Structure
 
 ```
@@ -58,6 +99,7 @@ tapmain/
 │   │   └── utils/
 │   ├── package.json
 │   └── vite.config.js
+├── screenshots/
 └── README.md
 ```
 
@@ -193,8 +235,8 @@ The seed script creates:
 - 1 Manager user
   - Email: `manager@example.com`
   - Password: `manager123`
-- 10 Employee users
-  - Email: `john@example.com`, `jane@example.com`, `bob@example.com`, `alice@example.com`, `charlie@example.com`, `david@example.com`, `emma@example.com`, `frank@example.com`, `grace@example.com`, `henry@example.com`
+- 15 Employee users
+  - Email: `john@example.com`, `jane@example.com`, `bob@example.com`, `alice@example.com`, `charlie@example.com`, `david@example.com`, `emma@example.com`, `frank@example.com`, `grace@example.com`, `henry@example.com`, `ivy@example.com`, `jack@example.com`, `kara@example.com`, `liam@example.com`, `maya@example.com`
   - Password: `employee123`
 - Sample attendance data for the last 30 days
 
