@@ -15,7 +15,7 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-content">
-        <div className="navbar-brand">Attendance System</div>
+        <div className="navbar-brand">Attendo</div>
         <div className="navbar-links">
           {user?.role === 'employee' && (
             <>

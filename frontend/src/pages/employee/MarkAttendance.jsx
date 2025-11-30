@@ -39,6 +39,9 @@ function MarkAttendance() {
   }
 
   const handleCheckOut = async () => {
+    const confirmed = window.confirm('Are you sure you want to check out now?')
+    if (!confirmed) return
+
     try {
       setMessage('')
       const response = await api.post('/attendance/checkout')
@@ -66,30 +69,55 @@ function MarkAttendance() {
           </div>
         )}
 
-        <div style={{ marginBottom: '20px' }}>
-          <p><strong>Date:</strong> {currentTime.toLocaleDateString()}</p>
-          <div className="current-time-display">
-            <p>{currentTime.toLocaleTimeString()}</p>
+        {/* Attendance Information Blocks */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', marginBottom: '30px', maxWidth: '850px' }}>
+          <div className="stat-card animate-fade-in-up" style={{
+            textAlign: 'center',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            padding: '15px',
+            flex: '1 1 calc(50% - 7.5px)',
+            minWidth: '200px',
+            boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+            borderRadius: '8px'
+          }}>
+            <h3 style={{ margin: '0 0 8px 0', fontSize: '14px', opacity: 0.9 }}>Date</h3>
+            <div style={{ fontSize: '16px', fontWeight: 'bold' }}>{currentTime.toLocaleDateString()}</div>
           </div>
-          <p><strong>Status:</strong>{' '}
-            <span className={`badge badge-${todayStatus?.status === 'present' ? 'success' : todayStatus?.status === 'late' ? 'warning' : 'danger'} ${message ? 'animate-pulse' : ''}`}>
+
+          <div className="stat-card animate-fade-in-up" style={{ textAlign: 'center', background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', color: 'white', padding: '15px', flex: '1 1 calc(50% - 7.5px)', minWidth: '200px', boxShadow: '0 4px 8px rgba(0,0,0,0.2)', borderRadius: '8px' }}>
+            <h3 style={{ margin: '0 0 8px 0', fontSize: '14px', opacity: 0.9 }}>Current Time</h3>
+            <div style={{ fontSize: '16px', fontWeight: 'bold' }}>{currentTime.toLocaleTimeString()}</div>
+          </div>
+
+          <div className="stat-card animate-fade-in-up" style={{ textAlign: 'center', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', padding: '15px', flex: '1 1 calc(50% - 7.5px)', minWidth: '200px', boxShadow: '0 4px 8px rgba(0,0,0,0.2)', borderRadius: '8px' }}>
+            <h3 style={{ margin: '0 0 8px 0', fontSize: '14px', opacity: 0.9 }}>Status</h3>
+            <div style={{ fontSize: '16px', fontWeight: 'bold', textTransform: 'uppercase' }}>
               {todayStatus?.status?.toUpperCase() || 'NOT CHECKED IN'}
-            </span>
-          </p>
+            </div>
+          </div>
+
+          {todayStatus?.checkInTime && (
+            <div className="stat-card animate-fade-in-up" style={{ textAlign: 'center', background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', color: 'white', padding: '15px', flex: '1 1 calc(50% - 7.5px)', minWidth: '200px', boxShadow: '0 4px 8px rgba(0,0,0,0.2)', borderRadius: '8px' }}>
+              <h3 style={{ margin: '0 0 8px 0', fontSize: '14px', opacity: 0.9 }}>Check In Time</h3>
+              <div style={{ fontSize: '14px', fontWeight: 'bold' }}>{new Date(todayStatus.checkInTime).toLocaleString()}</div>
+            </div>
+          )}
+
+          {todayStatus?.checkOutTime && (
+            <>
+              <div className="stat-card animate-fade-in-up" style={{ textAlign: 'center', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', padding: '15px', flex: '1 1 calc(50% - 7.5px)', minWidth: '200px', boxShadow: '0 4px 8px rgba(0,0,0,0.2)', borderRadius: '8px' }}>
+                <h3 style={{ margin: '0 0 8px 0', fontSize: '14px', opacity: 0.9 }}>Check Out Time</h3>
+                <div style={{ fontSize: '14px', fontWeight: 'bold' }}>{new Date(todayStatus.checkOutTime).toLocaleString()}</div>
+              </div>
+
+              <div className="stat-card animate-fade-in-up" style={{ textAlign: 'center', background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', color: 'white', padding: '15px', flex: '1 1 calc(50% - 7.5px)', minWidth: '200px', boxShadow: '0 4px 8px rgba(0,0,0,0.2)', borderRadius: '8px' }}>
+                <h3 style={{ margin: '0 0 8px 0', fontSize: '14px', opacity: 0.9 }}>Total Hours</h3>
+                <div style={{ fontSize: '16px', fontWeight: 'bold' }}>{todayStatus.totalHours || 0} hours</div>
+              </div>
+            </>
+          )}
         </div>
-
-        {todayStatus?.checkInTime && (
-          <div style={{ marginBottom: '20px' }}>
-            <p><strong>Check In Time:</strong> {new Date(todayStatus.checkInTime).toLocaleString()}</p>
-          </div>
-        )}
-
-        {todayStatus?.checkOutTime && (
-          <div style={{ marginBottom: '20px' }}>
-            <p><strong>Check Out Time:</strong> {new Date(todayStatus.checkOutTime).toLocaleString()}</p>
-            <p><strong>Total Hours:</strong> {todayStatus.totalHours || 0} hours</p>
-          </div>
-        )}
 
         <div style={{ display: 'flex', gap: '10px' }}>
           {!todayStatus?.checkedIn && (

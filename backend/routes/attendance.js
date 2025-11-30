@@ -127,12 +127,19 @@ router.get('/today', auth, async (req, res) => {
       });
     }
 
+    // Calculate total hours if not set or if both times are present
+    let totalHours = attendance.totalHours;
+    if (attendance.checkInTime && attendance.checkOutTime) {
+      const diff = attendance.checkOutTime - attendance.checkInTime;
+      totalHours = Math.round((diff / (1000 * 60 * 60)) * 100) / 100;
+    }
+
     res.json({
       checkedIn: !!attendance.checkInTime,
       checkedOut: !!attendance.checkOutTime,
       checkInTime: attendance.checkInTime,
       checkOutTime: attendance.checkOutTime,
-      totalHours: attendance.totalHours,
+      totalHours: totalHours,
       status: attendance.status
     });
   } catch (error) {
@@ -159,7 +166,17 @@ router.get('/my-history', auth, async (req, res) => {
       .sort({ date: -1 })
       .limit(100);
 
-    res.json(attendance);
+    // Calculate total hours for each record if both times are present
+    const attendanceWithHours = attendance.map(att => {
+      const attObj = att.toObject();
+      if (att.checkInTime && att.checkOutTime) {
+        const diff = att.checkOutTime - att.checkInTime;
+        attObj.totalHours = Math.round((diff / (1000 * 60 * 60)) * 100) / 100;
+      }
+      return attObj;
+    });
+
+    res.json(attendanceWithHours);
   } catch (error) {
     console.error('Get history error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });

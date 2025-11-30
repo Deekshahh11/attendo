@@ -45,12 +45,12 @@ function TeamCalendarView() {
   const getDateStatus = (date) => {
     const dayAttendance = getAttendanceForDate(date)
     if (dayAttendance.length === 0) return null
-    
+
     const present = dayAttendance.filter(a => a.status === 'present' || a.status === 'late').length
     const total = dayAttendance.length
-    
-    if (present === total) return 'all-present'
-    if (present === 0) return 'all-absent'
+
+    if (present === total) return 'present'
+    if (present === 0) return 'absent'
     return 'partial'
   }
 

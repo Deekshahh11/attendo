@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import api from '../../utils/api'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, Area, AreaChart } from 'recharts'
 
 import './EmployeeStyles.css'
 
@@ -30,7 +30,7 @@ function EmployeeDashboard() {
   const handleCheckIn = async () => {
     try {
       await api.post('/attendance/checkin')
-      fetchDashboardData()
+      navigate('/mark-attendance')
     } catch (error) {
       alert(error.response?.data?.message || 'Error checking in')
     }
@@ -39,7 +39,7 @@ function EmployeeDashboard() {
   const handleCheckOut = async () => {
     try {
       await api.post('/attendance/checkout')
-      fetchDashboardData()
+      navigate('/mark-attendance')
     } catch (error) {
       alert(error.response?.data?.message || 'Error checking out')
     }
@@ -57,6 +57,18 @@ function EmployeeDashboard() {
     date: new Date(att.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
     hours: att.totalHours || 0
   }))
+
+  // Calculate additional stats
+  const totalDays = dashboardData.monthStats.present + dashboardData.monthStats.absent + dashboardData.monthStats.late
+  const attendancePercentage = totalDays > 0 ? Math.round(((dashboardData.monthStats.present + dashboardData.monthStats.late) / totalDays) * 100) : 0
+  const averageHours = totalDays > 0 ? Math.round((dashboardData.monthStats.totalHours / totalDays) * 100) / 100 : 0
+
+  // Pie chart data
+  const pieData = [
+    { name: 'Present', value: dashboardData.monthStats.present, color: '#28a745' },
+    { name: 'Absent', value: dashboardData.monthStats.absent, color: '#dc3545' },
+    { name: 'Late', value: dashboardData.monthStats.late, color: '#ffc107' }
+  ].filter(item => item.value > 0)
 
   return (
     <div className="container employee-page-container">
@@ -116,21 +128,102 @@ function EmployeeDashboard() {
           <h3>Total Hours</h3>
           <div className="value" style={{ color: '#007bff' }}>{dashboardData.monthStats.totalHours}</div>
         </div>
+        <div className="stat-card">
+          <h3>Attendance %</h3>
+          <div className="value" style={{ color: '#17a2b8' }}>{attendancePercentage}%</div>
+        </div>
+        <div className="stat-card">
+          <h3>Avg Hours/Day</h3>
+          <div className="value" style={{ color: '#6f42c1' }}>{averageHours}</div>
+        </div>
       </div>
 
-      {/* Recent Attendance Chart */}
-      <div className="card">
-        <h2>Recent Attendance (Last 7 Days)</h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="hours" stroke="#8884d8" name="Hours Worked" />
-          </LineChart>
-        </ResponsiveContainer>
+      {/* Charts */}
+      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+        {/* Recent Attendance Chart */}
+        <div className="card" style={{ flex: 1, minWidth: '300px', boxShadow: '0 8px 16px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2)' }}>
+          <h2>Recent Attendance (Last 7 Days)</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <AreaChart data={chartData}>
+              <defs>
+                <linearGradient id="colorHours" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#8884d8" stopOpacity={0.1}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+              <XAxis dataKey="date" stroke="#666" />
+              <YAxis stroke="#666" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'rgba(255,255,255,0.95)',
+                  border: '1px solid #ccc',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
+                }}
+              />
+              <Area
+                type="monotone"
+                dataKey="hours"
+                stroke="#8884d8"
+                fillOpacity={1}
+                fill="url(#colorHours)"
+                strokeWidth={3}
+                name="Hours Worked"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Attendance Distribution Pie Chart */}
+        <div className="card" style={{
+          flex: 1,
+          minWidth: '300px',
+          boxShadow: '0 8px 16px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.2)',
+          transform: 'perspective(1000px) rotateX(5deg)',
+          transformStyle: 'preserve-3d'
+        }}>
+          <h2>Monthly Attendance Distribution</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={pieData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+                style={{
+                  filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.4)) drop-shadow(-2px -2px 4px rgba(255,255,255,0.1))',
+                  transform: 'translateZ(20px)'
+                }}
+                stroke="#fff"
+                strokeWidth={2}
+              >
+                {pieData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={entry.color}
+                    style={{
+                      filter: `drop-shadow(2px 2px 4px ${entry.color}40)`,
+                      transform: `scale(${1 + index * 0.05})`
+                    }}
+                  />
+                ))}
+              </Pie>
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'rgba(255,255,255,0.95)',
+                  border: '1px solid #ccc',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
+                }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
       {/* Recent Attendance Table */}

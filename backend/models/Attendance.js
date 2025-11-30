@@ -39,6 +39,8 @@ attendanceSchema.pre('save', function (next) {
   if (this.checkInTime && this.checkOutTime) {
     const diff = this.checkOutTime - this.checkInTime;
     this.totalHours = Math.round((diff / (1000 * 60 * 60)) * 100) / 100; // Round to 2 decimal places
+  } else {
+    this.totalHours = 0;
   }
   next();
 });

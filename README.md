@@ -1,3 +1,7 @@
+Name : H H Deeksha
+College Name : Adichunchangiri Institute of Technology Chikkamagaluru - 577102
+Contact Number : 9482885019
+
 # Employee Attendance System
 
 A comprehensive attendance tracking system with role-based access for employees and managers.
@@ -189,8 +193,8 @@ The seed script creates:
 - 1 Manager user
   - Email: `manager@example.com`
   - Password: `manager123`
-- 5 Employee users
-  - Email: `john@example.com`, `jane@example.com`, etc.
+- 10 Employee users
+  - Email: `john@example.com`, `jane@example.com`, `bob@example.com`, `alice@example.com`, `charlie@example.com`, `david@example.com`, `emma@example.com`, `frank@example.com`, `grace@example.com`, `henry@example.com`
   - Password: `employee123`
 - Sample attendance data for the last 30 days
 
